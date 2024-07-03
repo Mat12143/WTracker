@@ -54,6 +54,8 @@ func (w *WeatherAPI) RetrieveWeathers() ([]Result) {
         url := "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&lang=it&units=metric&appid=%s"
         url = fmt.Sprintf(url, c.Lat, c.Lon, os.Getenv("OPEN_METEO_API_KEY"))
 
+        log.Println(url)
+
         resp, err := http.Get(url)
 
         if err != nil {
@@ -67,6 +69,12 @@ func (w *WeatherAPI) RetrieveWeathers() ([]Result) {
 
         if err != nil {
             log.Println(err)
+            continue
+        }
+
+        if resp.StatusCode != 200 {
+            log.Println(resp.StatusCode)
+            log.Println(string(body))
             continue
         }
 
